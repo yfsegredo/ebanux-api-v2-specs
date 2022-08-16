@@ -1,0 +1,8 @@
+type: "object"
+properties:
+  attr1:
+    type: string
+    readOnly: true
+    description: Attr1 ...
+  attr2:
+    type: string

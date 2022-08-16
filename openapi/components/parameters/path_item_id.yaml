@@ -1,0 +1,7 @@
+name: id
+in: path
+required: true
+schema:
+  type: string
+  description: Item identifier
+  example: 5d04051125d9852c71016793

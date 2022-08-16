@@ -1,0 +1,48 @@
+parameters:
+  - $ref: ../components/parameters/path_item_id.yaml
+
+get:
+  tags:
+    - Subscriptions
+  operationId: get_subscription
+  summary: Retrieve an subscription
+  description: |
+    Find and return the subscription with the given id.
+  responses:
+    '200':
+      $ref: ../components/responses/subscription_item.yaml
+    '403':
+      description: Forbidden
+    '404':
+      $ref: ../components/responses/item_not_found.yaml
+post:
+  tags:
+    - Subscriptions
+  operationId: update_subscription
+  summary: Update a subscription
+  description: |
+    Find and update the subscription with the given id.
+  requestBody:
+    $ref: ../components/requestBodies/subscription_request_put_data.yaml
+  responses:
+    '200':
+      $ref: ../components/responses/subscription_item.yaml
+    '403':
+      description: Forbidden
+    '404':
+      $ref: ../components/responses/item_not_found.yaml
+
+delete:
+  tags:
+    - Subscriptions
+  operationId: cancel_subscription
+  summary: Cancel a subscription
+  description: |
+    Find and cancel the subscription with the given id.
+  responses:
+    '200':
+      $ref: ../components/responses/subscription_item.yaml
+    '403':
+      description: Forbidden
+    '404':
+      $ref: ../components/responses/item_not_found.yaml

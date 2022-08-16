@@ -1,0 +1,58 @@
+openapi: 3.1.0
+info:
+  version: 2.0.0
+  title: Ebanux-Back - API
+  termsOfService: 'https://www.ebanux.com/terms'
+  contact:
+    email: support@ebanux.com
+    url: 'https://ebanux.slack.com/messages/support'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'logo.png'
+    altText: Ebanux-Back
+  description:
+    $ref: ./info-description.md
+tags:
+  - name: Products
+    description: |
+      TODO: ...
+  - name: Payment Links
+    description: |
+      TODO: ...
+  - name: Customers
+    description: |
+      TODO: ...
+  - name: Subscriptions
+    description: |
+      TODO: ...
+  - name: Users
+    description: |
+      TODO: ...
+servers:
+  - url: 'https://{live_mode}.ebanux.link/api/v2.0'
+    variables:
+      live_mode:
+        default: dev
+        description: Live mode allow dev or prod value
+
+paths:
+  /subscriptions:
+    $ref: paths/subscriptions.yaml
+  /subscriptions/{id}:
+    $ref: paths/subscriptions@{id}.yaml
+
+security:
+  - main_auth: []
+
+components:
+  securitySchemes:
+    main_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: 'https://{live_mode}.ebanux.link/api/v2.0/oauth/token'
+          refreshUrl: 'https://{live_mode}.ebanux.link/api/v2.0/oauth/token'
+          scopes:
+            'admin': Admin

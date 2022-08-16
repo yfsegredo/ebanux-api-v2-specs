@@ -1,0 +1,6 @@
+# Dir for bundles
+.env
+.idea
+dist
+node_modules
+tmp

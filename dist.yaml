@@ -1,0 +1,293 @@
+openapi: 3.1.0
+info:
+  version: 2.0.0
+  title: Ebanux-Back - API
+  termsOfService: https://www.ebanux.com/terms
+  contact:
+    email: support@ebanux.com
+    url: https://ebanux.slack.com/messages/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  x-logo:
+    url: logo.png
+    altText: Ebanux-Back
+  description: >-
+    # Introduction
+
+
+    [Ebanux](https://ebanux.com) allows you to sell products, services,
+    subscriptions or one-time payments. With payment links,
+
+    customers simply click or scan a QR code to access a quick payment.
+
+
+    The Ebanux-Back APIv2 is a simple connector API for doing business and data
+    integrations.
+
+
+    This API is for individual retailers, SaaS services, or any business that
+    needs to handle multiple integrations.
+
+
+    * It is built over REST services on HTTPS.
+
+
+    * It has predictable resource URLs.
+
+
+    * It returns HTTP response codes to indicate errors.
+
+
+    * It accepts and returns JSON in the HTTP body.
+
+
+    * You can use your favorite HTTP/REST library for your programming language
+    to use Ebanux-Back APIv2.
+tags:
+  - name: Products
+    description: |
+      TODO: ...
+  - name: Payment Links
+    description: |
+      TODO: ...
+  - name: Customers
+    description: |
+      TODO: ...
+  - name: Subscriptions
+    description: |
+      TODO: ...
+  - name: Users
+    description: |
+      TODO: ...
+servers:
+  - url: https://{live_mode}.ebanux.link/api/v2.0
+    variables:
+      live_mode:
+        default: dev
+        description: Live mode allow dev or prod value
+paths:
+  /subscriptions:
+    get:
+      tags:
+        - Subscriptions
+      operationId: get_subscriptions
+      summary: List all subscriptions
+      description: |
+        Returns the list of your subscriptions.
+      responses:
+        '200':
+          $ref: '#/components/responses/subscription_items'
+        '403':
+          description: Forbidden
+    post:
+      tags:
+        - Subscriptions
+      operationId: create_subscription
+      summary: Create a subscription
+      description: |
+        Add a new item.
+      requestBody:
+        $ref: '#/components/requestBodies/subscription_request_post_data'
+      responses:
+        '200':
+          $ref: '#/components/responses/subscription_item'
+        '403':
+          description: Forbidden
+  /subscriptions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/path_item_id'
+    get:
+      tags:
+        - Subscriptions
+      operationId: get_subscription
+      summary: Retrieve an subscription
+      description: |
+        Find and return the subscription with the given id.
+      responses:
+        '200':
+          $ref: '#/components/responses/subscription_item'
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/item_not_found'
+    post:
+      tags:
+        - Subscriptions
+      operationId: update_subscription
+      summary: Update a subscription
+      description: |
+        Find and update the subscription with the given id.
+      requestBody:
+        $ref: '#/components/requestBodies/subscription_request_put_data'
+      responses:
+        '200':
+          $ref: '#/components/responses/subscription_item'
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/item_not_found'
+    delete:
+      tags:
+        - Subscriptions
+      operationId: cancel_subscription
+      summary: Cancel a subscription
+      description: |
+        Find and cancel the subscription with the given id.
+      responses:
+        '200':
+          $ref: '#/components/responses/subscription_item'
+        '403':
+          description: Forbidden
+        '404':
+          $ref: '#/components/responses/item_not_found'
+security:
+  - main_auth: []
+components:
+  securitySchemes:
+    main_auth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: https://{live_mode}.ebanux.link/api/v2.0/oauth/token
+          refreshUrl: https://{live_mode}.ebanux.link/api/v2.0/oauth/token
+          scopes:
+            admin: Admin
+  schemas:
+    pagination:
+      type: object
+      properties:
+        current_page:
+          description: Number of the page obtained
+          type: integer
+        total_pages:
+          description: Total number of pages
+          type: integer
+        total_items:
+          description: Total number of items
+          type: integer
+    subscription:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Item identifier
+        namespace:
+          type: string
+        name:
+          type: string
+          description: Lowercase name without spaces or special characters
+        description:
+          type: string
+          description: The plain-webhook description
+        path:
+          type: string
+          description: The plain-webhook path
+        method:
+          type: string
+          description: The http method
+          enum:
+            - get
+            - post
+            - put
+            - delete
+        metadata:
+          type: string
+        authorization_handler:
+          type: boolean
+          default: false
+    subscription_request:
+      type: object
+      properties:
+        attr1:
+          type: string
+          readOnly: true
+          description: Attr1 ...
+        attr2:
+          type: string
+  responses:
+    subscription_items:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                allOf:
+                  - $ref: '#/components/schemas/pagination'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/subscription'
+    subscription_item:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              result:
+                $ref: '#/components/schemas/subscription'
+    item_not_found:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                default: item not found
+  requestBodies:
+    subscription_request_post_data:
+      description: The subscription that will be update
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - namespace
+              - name
+              - language
+              - code
+            allOf:
+              - $ref: '#/components/schemas/subscription_request'
+              - properties:
+                  att1_put:
+                    type: string
+    subscription_request_put_data:
+      description: The subscription that will be created
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - namespace
+              - name
+              - language
+              - code
+            allOf:
+              - $ref: '#/components/schemas/subscription_request'
+              - properties:
+                  att1_post:
+                    type: string
+  parameters:
+    path_item_id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        description: Item identifier
+        example: 5d04051125d9852c71016793

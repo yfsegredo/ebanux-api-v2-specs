@@ -1,0 +1,11 @@
+type: object
+properties:
+  current_page:
+    description: Number of the page obtained
+    type: integer
+  total_pages:
+    description: Total number of pages
+    type: integer
+  total_items:
+    description: Total number of items
+    type: integer

@@ -1,0 +1,11 @@
+description: The subscription that will be update
+required: true
+content:
+  application/json:
+    schema:
+      required: [namespace,name,language,code]
+      allOf:
+        - $ref: ../schemas/subscription_request.yaml
+        - properties:
+            att1_put:
+              type: string

@@ -1,0 +1,27 @@
+get:
+  tags:
+    - Subscriptions
+  operationId: get_subscriptions
+  summary: List all subscriptions
+  description: |
+    Returns the list of your subscriptions.
+
+  responses:
+    '200':
+      $ref: ../components/responses/subscription_items.yaml
+    '403':
+      description: Forbidden
+post:
+  tags:
+    - Subscriptions
+  operationId: create_subscription
+  summary: Create a subscription
+  description: |
+    Add a new item.
+  requestBody:
+    $ref: ../components/requestBodies/subscription_request_post_data.yaml
+  responses:
+    '200':
+      $ref: ../components/responses/subscription_item.yaml
+    '403':
+      description: Forbidden
