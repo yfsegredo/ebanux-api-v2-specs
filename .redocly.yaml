@@ -1,6 +1,6 @@
 # See https://redocly.com/docs/cli/configuration/ for more information.
 apis:
-  sample@v1: 
+  ebanux@v2:
     root: openapi/openapi.yaml
 lint:
   extends:
@@ -9,7 +9,7 @@ lint:
     no-unused-components: error
 features.openapi:
   showConsole: true
-  htmlTemplate: ./docs/index.html
+  htmlTemplate: ./docs/index-tmpl.html
   theme:
     colors:
       primary:
